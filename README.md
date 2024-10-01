@@ -1,4 +1,4 @@
-# Description & requirements
+# Description
 
 This is a Countdown app where the user can define the end date and the name of the event taking
 place on that day. The countdown always starts from the current time and it displays the time
