@@ -1,0 +1,23 @@
+.countdown-container {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100vw;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
+  .countdown-container {
+    grid-template-rows: 100px 100px auto;
+    row-gap: 24px;
+    height: 70vh;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .countdown-container {
+    grid-template-rows: 20vh 20vh 100px;
+    row-gap: 24px;
+  }
+}

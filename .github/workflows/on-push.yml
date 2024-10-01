@@ -1,0 +1,52 @@
+name: Deploy on merge to master
+on:
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.19.1
+      - run: npm install
+      - run: npm run test:headless
+  build:
+    name: Build and push Docker image to DockerHub
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Docker registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_PASSWORD}}
+
+      - name: Build and push Docker image to registry
+        uses: docker/build-push-action@v5
+        with:
+          context: ./
+          push: true
+          tags: rawaaalkabbani457/countdown-app:latest
+  deploy:
+    name: Deploy to Azure Web App
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    steps:
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'countdown-app'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.CONTAINER_PUBLISH_PROFILE }}
+          images: 'rawaaalkabbani457/countdown-app:latest'

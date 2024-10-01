@@ -1,0 +1,21 @@
+<div class="countdown-container">
+  @if (eventTitle) {
+    <app-scaled-text
+      [text]="eventTitlePrefix + eventTitle"
+      style="color: #72035d"
+    ></app-scaled-text>
+  } @else {
+    <span>Please enter an event title!</span>
+  }
+  @if (countdownText) {
+    <app-scaled-text [text]="countdownText" style="color: #000000"></app-scaled-text>
+  } @else {
+    <span>Please enter an event date!</span>
+  }
+  <app-event-form
+    [defaultEventTitle]="eventTitle"
+    [defaultEventDate]="eventDate"
+    (titleChange)="onTitleChange($event)"
+    (dateChange)="onDateChange($event)"
+  ></app-event-form>
+</div>
